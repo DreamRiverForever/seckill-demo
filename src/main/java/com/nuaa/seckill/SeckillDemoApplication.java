@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.nuaa.seckill.pojo")
+@MapperScan("com.nuaa.seckill.mapper")
 public class SeckillDemoApplication {
 
     public static void main(String[] args) {

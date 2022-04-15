@@ -8,9 +8,9 @@ spring:
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    url: jdbc:mysql://127.0.0.1:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: "root"
+    password: "06162501"
     hikari:
       # 连接池名称
       pool-name: DateHikariCP
@@ -25,7 +25,7 @@ spring:
       # 最大存活时间，0表示永久存活
       max-lifetime: 180000
       # 连接超时时间，默认30s
-      connection-timeout: 30000
+      connection-timeout: 3000
       # 测试连接是否可用的查询语句
       connection-test-query: SELECT 1
 
