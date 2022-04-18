@@ -5,6 +5,9 @@ import com.nuaa.seckill.pojo.User;
 import com.nuaa.seckill.vo.LoginVo;
 import com.nuaa.seckill.vo.RespBean;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  *  服务类
@@ -15,5 +18,14 @@ import com.nuaa.seckill.vo.RespBean;
  */
 public interface IUserService extends IService<User> {
 
-    RespBean doLogin(LoginVo vo);
+    /**
+     * 登录功能
+     * @param vo
+     * @param request
+     * @param response
+     * @return
+     */
+    RespBean doLogin(LoginVo vo, HttpServletRequest request, HttpServletResponse response);
+
+    User getUserByCookie(String userTicket, HttpServletRequest request, HttpServletResponse response);
 }
