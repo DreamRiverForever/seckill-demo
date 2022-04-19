@@ -38,16 +38,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public RespBean doLogin(LoginVo vo, HttpServletRequest request, HttpServletResponse response) {
         String mobile = vo.getMobile();
         String password = vo.getPassword();
-//        if (StringUtils.isEmpty(mobile) || StringUtils.isEmpty(password))
-//            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
-//        if (!ValidatorUtil.isMobile(mobile))
-//            return RespBean.error(RespBeanEnum.MOBILE_ERROR);
         User user = userMapper.selectById(mobile);
         if (null == user)
-            // return RespBean.error(RespBeanEnum.LOGIN_ERROR);
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
         if (!MD5Util.fromPassToDBPass(password, user.getSalt()).equals(user.getPassword()))
-            // return RespBean.error(RespBeanEnum.LOGIN_ERROR);
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
         // 生成cookie
         String ticket = UUIDUtil.uuid();
