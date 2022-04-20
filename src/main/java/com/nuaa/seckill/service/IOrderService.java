@@ -2,6 +2,8 @@ package com.nuaa.seckill.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.nuaa.seckill.pojo.Order;
+import com.nuaa.seckill.pojo.User;
+import com.nuaa.seckill.vo.GoodsVo;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.nuaa.seckill.pojo.Order;
  */
 public interface IOrderService extends IService<Order> {
 
+    Order seckill(User user, GoodsVo goodsVo);
 }
