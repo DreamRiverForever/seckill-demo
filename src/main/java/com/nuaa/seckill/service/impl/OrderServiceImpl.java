@@ -2,16 +2,20 @@ package com.nuaa.seckill.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.nuaa.seckill.exception.GlobalException;
 import com.nuaa.seckill.mapper.OrderMapper;
-import com.nuaa.seckill.mapper.SeckillOrderMapper;
 import com.nuaa.seckill.pojo.Order;
 import com.nuaa.seckill.pojo.SeckillGoods;
 import com.nuaa.seckill.pojo.SeckillOrder;
 import com.nuaa.seckill.pojo.User;
+import com.nuaa.seckill.service.IGoodsService;
 import com.nuaa.seckill.service.IOrderService;
 import com.nuaa.seckill.service.ISeckillGoodsService;
 import com.nuaa.seckill.service.ISeckillOrderService;
 import com.nuaa.seckill.vo.GoodsVo;
+import com.nuaa.seckill.vo.OrderDetailVo;
+import com.nuaa.seckill.vo.RespBean;
+import com.nuaa.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +38,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private OrderMapper orderMapper;
     @Autowired
     private ISeckillOrderService seckillOrderService;
+
+    @Autowired
+    private IGoodsService goodsService;
 
     @Override
     public Order seckill(User user, GoodsVo goods) {
@@ -63,5 +70,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         seckillOrderService.save(seckillOrder);
         return order;
+    }
+
+    @Override
+    public OrderDetailVo detail(Long orderId) {
+        if (orderId == null) {
+            throw new GlobalException(RespBeanEnum.ORDER_NOT_EXIST);
+        }
+        Order order = orderMapper.selectById(orderId);
+        GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(order.getGoodsId());
+        OrderDetailVo orderDetailVo = new OrderDetailVo();
+        orderDetailVo.setOrder(order);
+        orderDetailVo.setGoodsVo(goodsVo);
+        return orderDetailVo;
     }
 }

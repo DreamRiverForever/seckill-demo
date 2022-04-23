@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/seckill")
@@ -31,8 +33,8 @@ public class SeckillController {
     @Autowired
     private IOrderService orderService;
     
-    @RequestMapping("/doSecKill")
-    public String doSeckill(Model model, User user, Long goodsId){
+    @RequestMapping("/doSecKill2")
+    public String doSecKill2(Model model, User user, Long goodsId){
         if (user == null)
             return "login";
         model.addAttribute("user" , user);
@@ -52,9 +54,26 @@ public class SeckillController {
         model.addAttribute("order", order);
         model.addAttribute("goods", goodsVo);
         return "orderDetail";
+    }
 
 
+    @RequestMapping(value = "/doSecKill", method = RequestMethod.POST)
+    @ResponseBody
+    public RespBean doSecKill(User user, Long goodsId){
+        if (user == null)
+            return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(goodsId);
+        if(goodsVo.getStockCount() < 1){
+            return RespBean.error(RespBeanEnum.EMPTY_STOCK);
+        }
 
+        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
+        if (seckillOrder != null){
+            return RespBean.error(RespBeanEnum.REPETITION_ERROR);
+        }
 
+        Order order = orderService.seckill(user, goodsVo);
+
+        return RespBean.success(order);
     }
 }

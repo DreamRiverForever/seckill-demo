@@ -49,6 +49,17 @@ spring:
       connection-timeout: 3000
       # 测试连接是否可用的查询语句
       connection-test-query: SELECT 1
+  web:
+    resources:
+      add-mappings: true
+      cache:
+        cachecontrol:
+          max-age: 3600
+      chain:
+        cache: true
+        enabled: true
+        compressed: true
+
 
 # mybatis-plus配置
 mybatis-plus:
