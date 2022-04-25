@@ -14,6 +14,7 @@ import com.nuaa.seckill.vo.GoodsVo;
 import com.nuaa.seckill.vo.RespBean;
 import com.nuaa.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,9 @@ public class SeckillController {
 
     @Autowired
     private IOrderService orderService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
     
     @RequestMapping("/doSecKill2")
     public String doSecKill2(Model model, User user, Long goodsId){
@@ -67,7 +71,8 @@ public class SeckillController {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
 
-        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
+        // SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
+        SeckillOrder seckillOrder = (SeckillOrder) redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
         if (seckillOrder != null){
             return RespBean.error(RespBeanEnum.REPETITION_ERROR);
         }
