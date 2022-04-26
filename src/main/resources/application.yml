@@ -2,7 +2,7 @@
 spring:
   # thymeleaf配置
   thymeleaf:
-  # 关闭缓存
+    # 关闭缓存
     cache: false
 
   # redis配置
@@ -25,6 +25,48 @@ spring:
         max-idle: 200
         # 最小空闲连接
         min-idle: 5
+  # rabbitmq配置
+  rabbitmq:
+    # 服务器
+    host: 127.0.0.1
+    # 用户名
+    username: guest
+    # 密码
+    password: guest
+    # 端口
+    port: 5672
+    # 虚拟主机
+    virtual-host: /
+    listener:
+      simple:
+        # 消费者最小数量
+        concurrency: 10
+        # 消费者最大数量
+        max-concurrency: 10
+        # 限制消费者每次处理一条消息
+        prefetch: 1
+        # 启动时是否默认启动容器，默认true
+        auto-startup: true
+        # 被拒绝时是否重新进入队列
+        default-requeue-rejected: true
+
+    template:
+      retry:
+        # 重试时间
+        enabled: true
+
+        # 重试时间
+        initial-interval: 1000ms
+
+        # 重试最大次数
+        max-attempts: 3
+
+        # 重试最大间隔时间
+        max-interval: 10000ms
+
+        # 重试的间隔系数
+        multiplier: 1
+
 
   # 数据库配置
   datasource:
