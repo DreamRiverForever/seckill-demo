@@ -50,7 +50,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         CookieUtil.setCookie(request, response, "userTicket", ticket);
         return RespBean.success(ticket);
     }
-
     @Override
     public User getUserByCookie(String userTicket, HttpServletRequest request, HttpServletResponse response) {
         if (userTicket == null)

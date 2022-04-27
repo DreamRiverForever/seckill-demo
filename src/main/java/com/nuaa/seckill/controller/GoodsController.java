@@ -136,7 +136,7 @@ public class GoodsController {
         detailVo.setGoodsVo(vo);
         detailVo.setSecKillStatus(secKillStatus);
         detailVo.setRemainSeconds(remainSeconds);
-        System.out.println(detailVo);
+//        System.out.println(detailVo);
 
         return RespBean.success(detailVo);
     }

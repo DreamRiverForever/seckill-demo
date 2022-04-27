@@ -12,6 +12,7 @@ public class MQSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    /*
     // Fanout模式
     public void send(Object obj) {
         log.info("发消息:" + obj);
@@ -38,6 +39,18 @@ public class MQSender {
     public void send04(Object msg) {
         log.info("发送消息(QUEUE02接收)：" + msg);
         rabbitTemplate.convertAndSend("topicExchange", "green.queue.green.message", msg);
+    }
+
+     */
+
+    /**
+     * 发送秒杀信息
+     * @param msg
+     */
+    public void sendSecKillMessage(String msg) {
+        log.info("发送信息：" + msg);
+        rabbitTemplate.convertAndSend("seckillExchange", "seckill.message", msg);
+
     }
 
 

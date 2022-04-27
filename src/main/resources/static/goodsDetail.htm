@@ -88,7 +88,7 @@
             },
             success: function (data) {
                 if (data.code == 200) {
-                    window.location.href="/orderDetail.htm?orderId="+data.obj.id;
+                    // window.location.href="/orderDetail.htm?orderId="+data.obj.id;
                     getResult($("#goodsId").val());
                 } else {
                     layer.msg("客户端请求出错");
@@ -103,14 +103,15 @@
     function getResult(goodsId) {
         g_showLoading();
         $.ajax({
-            url: "/seckill/getResult",
+            url: "/seckill/result",
             type: "GET",
             data: {
                 goodsId: goodsId
             },
             success: function (data) {
+                console.log(data)
                 if (data.code == 200) {
-                    var result = data.object;
+                    var result = data.obj;
                     if (result < 0) {
                         layer.msg("对不起，秒杀失败");
                     } else if (result == 0) {
@@ -120,7 +121,7 @@
                     } else {
                         layer.confirm("恭喜您，秒杀成功！查看订单？", {btn: ["确定", "取消"]},
                             function () {
-                                window.location.href = "/orderDetail.html?orderId=" + result;
+                                window.location.href = "/orderDetail.htm?orderId=" + result;
                             },
                             function () {
                                 layer.close();

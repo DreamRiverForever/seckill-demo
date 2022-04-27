@@ -20,6 +20,7 @@ import com.nuaa.seckill.vo.RespBean;
 import com.nuaa.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,14 +54,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     public Order seckill(User user, GoodsVo goods) {
 
+        ValueOperations operations = redisTemplate.opsForValue();
         SeckillGoods seckillGoods = seckillGoodsService.getOne(new QueryWrapper<SeckillGoods>().eq("goods_id", goods.getId()));
         seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);
-        // seckillGoodsService.updateById(seckillGoods);
-        boolean updateResult = seckillGoodsService.update(new UpdateWrapper<SeckillGoods>().setSql("stock_count = " + "stock_count - 1").
-                eq("goods_id", goods.getId()).gt("stock_count", 0));
-        if (!updateResult){
+
+        if (seckillGoods.getStockCount() < 0) {
+            // 判断是否还有库存
+            operations.set("isStockEmpty:" + goods.getId(), "0");
             return null;
         }
+
+        // 更新秒杀商品库存
+        boolean updateResult = seckillGoodsService.update(new UpdateWrapper<SeckillGoods>().setSql("stock_count = " + "stock_count - 1").
+                eq("goods_id", goods.getId()).gt("stock_count", 0));
+
         // 生成订单
         Order order = new Order();
         order.setGoodsId(goods.getId());
