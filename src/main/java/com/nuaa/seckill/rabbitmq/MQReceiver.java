@@ -33,9 +33,6 @@ public class MQReceiver {
     private IOrderService orderService;
 
 
-    @Autowired
-    private ISeckillOrderService seckillOrderService;
-
     @RabbitListener(queues = "seckillQueue")
     public void receive(String msg) {
         log.info("接收消息：" + msg);

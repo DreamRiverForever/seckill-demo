@@ -36,8 +36,8 @@ public class RabbitMQTopicConfig {
 //    private static final String EXCHANGE = "topicExchange";
 //    private static final String ROUTINGKEY01 = "#.queue.#";
 //    private static final String ROUTINGKEY02 = "*.queue.#";
-//
-//
+
+
 //    @Bean
 //    public Queue queue01() {
 //        return new Queue(QUEUE01);

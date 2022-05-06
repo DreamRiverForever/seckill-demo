@@ -43,24 +43,24 @@ public class UserUtil {
             users.add(user);
         }
         System.out.println("create user");
-//         // //插入数据库
-//         Connection conn = getConn();
-//         String sql = "insert into t_user(login_count, nickname, register_date, salt, password, id)values(?,?,?,?,?,?)";
-//         PreparedStatement pstmt = conn.prepareStatement(sql);
-//         for (int i = 0; i < users.size(); i++) {
-//         	User user = users.get(i);
-//         	pstmt.setInt(1, user.getLoginCount());
-//         	pstmt.setString(2, user.getNickname());
-//         	pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
-//         	pstmt.setString(4, user.getSalt());
-//         	pstmt.setString(5, user.getPassword());
-//         	pstmt.setLong(6, user.getId());
-//         	pstmt.addBatch();
-//         }
-//         pstmt.executeBatch();
-//         pstmt.close();
-//         conn.close();
-//         System.out.println("insert to db");
+        // 插入数据库
+//        Connection conn = getConn();
+//        String sql = "insert into t_user(login_count, nickname, register_date, salt, password, id)values(?,?,?,?,?,?)";
+//        PreparedStatement pstmt = conn.prepareStatement(sql);
+//        for (int i = 0; i < users.size(); i++) {
+//            User user = users.get(i);
+//            pstmt.setInt(1, user.getLoginCount());
+//            pstmt.setString(2, user.getNickname());
+//            pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
+//            pstmt.setString(4, user.getSalt());
+//            pstmt.setString(5, user.getPassword());
+//            pstmt.setLong(6, user.getId());
+//            pstmt.addBatch();
+//        }
+//        pstmt.executeBatch();
+//        pstmt.close();
+//        conn.close();
+//        System.out.println("insert to db");
         // 登录，生成userTicket
         String urlString = "http://localhost:8080/login/doLogin";
         File file = new File("config.txt");
@@ -71,15 +71,22 @@ public class UserUtil {
         file.createNewFile();
         raf.seek(0);
         for (int i = 0; i < users.size(); i++) {
+            // 获取用户id电话号码
             User user = users.get(i);
+            // 构建一个url对象
             URL url = new URL(urlString);
+            // 返回一个URLConnection实例，该实例表示与该引用的远程对象的连接 URL
             HttpURLConnection co = (HttpURLConnection) url.openConnection();
+            // 设置请求方法
             co.setRequestMethod("POST");
             co.setDoOutput(true);
+            // 获取连接流
             OutputStream out = co.getOutputStream();
+            // 拼接url传给浏览器
             String params = "mobile=" + user.getId() + "&password=" + MD5Util.inputPassToFromPass("123456");
             out.write(params.getBytes());
             out.flush();
+            // 接收浏览器的返回值
             InputStream inputStream = co.getInputStream();
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             byte buff[] = new byte[1024];
